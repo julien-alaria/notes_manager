@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "student.h"
@@ -23,5 +24,37 @@ void free_student(struct Student *student) {
     if (student != NULL) {
         free(student->name);
         free(student);
+    }
+}
+
+void append_student(struct Student **head, struct Student *new_student) {
+    if (new_student == NULL) {
+        return;
+    }
+    if (*head == NULL) {
+        *head = new_student;
+        return;
+    }
+    struct Student *current = *head;
+    while (current->next != NULL) {
+        current = current->next;
+    }
+    current->next = new_student;
+}
+
+void print_students(const struct Student *head) {
+    const struct Student *current = head;
+    while (current != NULL) {
+        printf("%d %s %d\n", current->id, current->name, current->grade);
+        current = current->next;
+    }
+}
+
+void free_students(struct Student *head) {
+    struct Student *current = head;
+    while (current != NULL) {
+        struct Student *next = current->next;
+        free_student(current);
+        current = next;
     }
 }
