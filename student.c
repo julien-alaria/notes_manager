@@ -60,7 +60,7 @@ void free_students(struct Student *head) {
 }
 
 struct Student *find_student(struct Student *head, int id) {
-    struct Student *current =  head;
+    struct Student *current = head;
     while (current != NULL) {
         if (current->id == id) {
             return current;
