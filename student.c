@@ -58,3 +58,34 @@ void free_students(struct Student *head) {
         current = next;
     }
 }
+
+struct Student *find_student(struct Student *head, int id) {
+    struct Student *current =  head;
+    while (current != NULL) {
+        if (current->id == id) {
+            return current;
+        }
+        current = current->next;
+    }
+    return NULL;
+}
+
+int delete_student(struct Student **head, int id) {
+    struct Student *previous = NULL;
+    struct Student *current = *head;
+
+    while (current != NULL) {
+        if (current->id == id) {
+            if (previous == NULL) {
+                *head = current->next;
+            } else {
+                previous->next = current->next;
+            }
+            free_student(current);
+            return 0;
+        }
+        previous = current;
+        current = current->next;
+    }
+    return -1;
+}
