@@ -89,3 +89,57 @@ int delete_student(struct Student **head, int id) {
     }
     return -1;
 }
+
+int count_students(const struct Student *head) {
+    int count = 0;
+    const struct Student *current = head;
+    while (current != NULL) {
+        count++;
+        current = current->next;
+    }
+    return count;
+}
+
+double average(const struct Student *head) {
+    int count = count_students(head);
+    if (count == 0) {
+        return 0.0;
+    }
+    int total = 0;
+    const struct Student *current = head;
+    while (current != NULL) {
+        total += current->grade;
+        current = current->next;
+    }
+    return (double)total / count;
+}
+
+const struct Student *best_student(const struct Student *head) {
+    if (head == NULL) {
+        return NULL;
+    }
+    const struct Student *best = head;
+    const struct Student *current = head->next;
+    while (current != NULL) {
+        if (current->grade > best->grade) {
+            best = current;
+        }
+        current = current->next;
+    }
+    return best;
+}
+
+const struct Student *worst_student(const struct Student *head) {
+    if (head == NULL) {
+        return NULL;
+    }
+    const struct Student *worst = head;
+    const struct Student *current = head->next;
+    while (current != NULL) {
+        if (current->grade < worst->grade) {
+            worst = current;
+        }
+        current = current->next;
+    }
+    return worst;
+}

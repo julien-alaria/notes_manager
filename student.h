@@ -15,5 +15,9 @@ void append_student(struct Student **head, struct Student *new_student);
 void print_students(const struct Student *head);
 void free_students(struct Student *head);
 int delete_student(struct Student **head, int id);
+int count_students(const struct Student *head);
+double average(const struct Student *head);
+const struct Student *best_student(const struct Student *head);
+const struct Student *worst_student(const struct Student *head);
 
 #endif
