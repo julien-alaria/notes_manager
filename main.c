@@ -1,66 +1,100 @@
 #include <stdio.h>
+#include <string.h>
 #include "student.h"
+
+static void empty_buffer(void) {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+    }
+}
+
+static int read_int(const char *prompt, int *out) {
+    char line[64];
+    printf("%s", prompt);
+    if (fgets(line, sizeof(line), stdin) == NULL) {
+        return -1;
+    }
+    if (strchr(line, '\n') == NULL) {
+        empty_buffer();
+    }
+    if (sscanf(line, "%d", out) != 1) {
+        printf("Invalid input\n");
+        return -1;
+    }
+    return 0;
+}
+
+static int read_string(const char *prompt, char *out, size_t size) {
+    printf("%s", prompt);
+    if (fgets(out, (int)size, stdin) == NULL) {
+        return -1;
+    }
+    if (strchr(out, '\n') == NULL) {
+        empty_buffer();
+    }
+    out[strcspn(out, "\n")] = '\0';
+    if (out[0] == '\0') {
+        printf("Invalid input\n");
+        return -1;
+    }
+    return 0;
+}
 
 int main(void) {
     struct Student *head = NULL;
-    const char *names[3] = {"Alice", "Bob", "Claire"};
-    int grades[3] = {20, 12, 19};
+    int choice;
 
-    for (int i = 0; i < 3; i++) {
-        struct Student *s = create_student(i+1, names[i], grades[i]);
-        if (s == NULL) {
-            printf("malloc failed\n");
-            free_students(head);
-            return 1;
+    do {
+        printf("Menu\n");
+        printf("1. Add student\n");
+        printf("2. Show students\n");
+        printf("0. Quit\n");
+        if (read_int("Enter your choice : ", &choice) != 0) {
+            choice = -1;
         }
-        append_student(&head, s);
-    }
+        switch (choice) {
+            case 1: {
+                int id;
+                int grade;
+                char name[50];
 
-    struct Student *found = find_student(head, 2);
-    if (found != NULL) {
-        printf("%s\n", found->name);
-    } else {
-        printf("Not found\n");
-    }
+                if (read_int("Id : ", &id) != 0) {
+                    break;
+                }
+                if (read_string("Name : ", name, sizeof(name)) != 0) {
+                    break;
+                }
+                if (read_int("Grade : ", &grade) != 0) {
+                    break;
+                }
+                if (grade < 0 || grade > 20) {
+                    printf("Invalid grade\n");
+                    break;
+                }
+                if (find_student(head, id) != NULL) {
+                    printf("Id already exists\n");
+                    break;
+                }
+                struct Student *s = create_student(id, name, grade);
+                if (s == NULL) {
+                    printf("malloc failed\n");
+                    break;
+                }
+                append_student(&head, s);
+                break;
+            }
 
-    printf("Average: %.2f\n", average(head));
+            case 2:
+                print_students(head);
+                break;
 
-    const struct Student *best = best_student(head);
-    if (best != NULL) {
-        printf("Best: %s %d\n", best->name, best->grade);
-    }
-    const struct Student *worst = worst_student(head);
-    if (worst != NULL) {
-        printf("Worst: %s %d\n", worst->name, worst->grade);
-    }
+            case 0:
+                break;
 
-    found = find_student(head, 99);
-    if (found != NULL) {
-        printf("%s\n", found->name);
-    } else {
-        printf("Not found\n");
-    }
-
-    if (delete_student(&head, 2) == 0) {
-        printf("Deleted 2\n");
-    } else {
-        printf("Delete 2 failed\n");
-    }
-
-    print_students(head);
-
-    if (delete_student(&head, 1) == 0) {
-        printf("Deleted 1\n");
-    } else {
-        printf("Delete 1 failed\n");
-    }
-    print_students(head);
-
-    if (delete_student(&head, 99) == 0) {
-        printf("Deleted 99\n");
-    } else {
-        printf("Delete 99 failed\n");
-    }
+            default:
+                printf("Invalid choice\n");
+        }
+    } while (choice != 0);
 
     free_students(head);
     return 0;

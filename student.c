@@ -44,6 +44,10 @@ void append_student(struct Student **head, struct Student *new_student) {
 
 void print_students(const struct Student *head) {
     const struct Student *current = head;
+    if (head == NULL) {
+        printf("Student list is empty\n");
+        return;
+    }
     while (current != NULL) {
         printf("%d %s %d\n", current->id, current->name, current->grade);
         current = current->next;
