@@ -48,6 +48,11 @@ int main(void) {
         printf("Menu\n");
         printf("1. Add student\n");
         printf("2. Show students\n");
+        printf("3. Find by id\n");
+        printf("4. Delete student\n");
+        printf("5. Show average\n");
+        printf("6. Show best\n");
+        printf("7. Show worst\n");
         printf("0. Quit\n");
         if (read_int("Enter your choice : ", &choice) != 0) {
             choice = -1;
@@ -83,10 +88,61 @@ int main(void) {
                 append_student(&head, s);
                 break;
             }
-
             case 2:
                 print_students(head);
                 break;
+
+            case 3: {
+                int id;
+                if (read_int("Id : ", &id) != 0) {
+                    break;
+                }
+                struct Student *found = find_student(head, id);
+                if (found == NULL) {
+                    printf("Student not found\n");
+                    break;
+                }
+                printf("%d %s %d\n", found->id, found->name, found->grade);
+                break;
+            }
+            case 4: {
+                int id;
+                if (read_int("Id : ", &id) != 0) {
+                    break;
+                }
+                if (delete_student(&head, id) == 0) {
+                    printf("Deleted\n");
+                } else {
+                    printf("Student not found\n");
+                }
+                break;
+            }
+            case 5:
+            if (head == NULL) {
+                printf("Student list is empty\n");
+                break;
+            }
+            printf("Average: %.2f\n", average(head));
+                break;
+
+            case 6: {
+                const struct Student *best = best_student(head);
+                if (best == NULL) {
+                    printf("Student list is empty\n");
+                    break;
+                }
+                printf("Best: %s %d\n", best->name, best->grade);
+                break;
+            }
+            case 7: {
+                const struct Student *worst = worst_student(head);
+                if (worst == NULL) {
+                    printf("Worst student list is empty\n");
+                    break;
+                }
+                printf("Worst: %s %d\n", worst->name, worst->grade);
+                break;
+            }
 
             case 0:
                 break;
