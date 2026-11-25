@@ -147,3 +147,17 @@ const struct Student *worst_student(const struct Student *head) {
     }
     return worst;
 }
+
+int save_students(const struct Student *head, const char *filename) {
+    FILE *f = fopen(filename, "w");
+    if (f == NULL) {
+        return -1;
+    }
+    const struct Student *current = head;
+    while (current != NULL) {
+        fprintf(f, "%d %d\n%s\n", current->id, current->grade, current->name);
+        current = current->next;
+    }
+    fclose(f);
+    return 0;
+}

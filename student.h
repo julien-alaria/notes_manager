@@ -19,5 +19,7 @@ int count_students(const struct Student *head);
 double average(const struct Student *head);
 const struct Student *best_student(const struct Student *head);
 const struct Student *worst_student(const struct Student *head);
+int save_students(const struct Student *head, const char *filename);
+struct Student *load_students(const char *filename);
 
 #endif
