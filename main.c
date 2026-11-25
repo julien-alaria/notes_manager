@@ -53,6 +53,8 @@ int main(void) {
         printf("5. Show average\n");
         printf("6. Show best\n");
         printf("7. Show worst\n");
+        printf("8. Save\n");
+        printf("9. Load\n");
         printf("0. Quit\n");
         if (read_int("Enter your choice : ", &choice) != 0) {
             choice = -1;
@@ -137,10 +139,29 @@ int main(void) {
             case 7: {
                 const struct Student *worst = worst_student(head);
                 if (worst == NULL) {
-                    printf("Worst student list is empty\n");
+                    printf("Student list is empty\n");
                     break;
                 }
                 printf("Worst: %s %d\n", worst->name, worst->grade);
+                break;
+            }
+            case 8:
+                if (save_students(head, "students.txt") == 0) {
+                    printf("Saved\n");
+                } else {
+                    printf("Save failed\n");
+                }
+                break;
+            
+            case 9: {
+                struct Student *loaded = load_students("students.txt");
+                if (loaded == NULL) {
+                    printf("Load failed or file empty\n");
+                    break;
+                }
+                free_students(head);
+                head = loaded;
+                printf("Loaded\n");
                 break;
             }
 

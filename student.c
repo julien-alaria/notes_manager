@@ -161,3 +161,30 @@ int save_students(const struct Student *head, const char *filename) {
     fclose(f);
     return 0;
 }
+
+struct Student *load_students(const char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (f == NULL) {
+        return NULL;
+    }
+    struct Student *head = NULL;
+    int id;
+    int grade;
+    char name[50];
+    while(fscanf(f, "%d %d", &id, &grade) == 2) {
+        fgetc(f);
+        if (fgets(name, sizeof(name), f) == NULL) {
+            break;
+        }
+        name[strcspn(name, "\n")] = '\0';
+        struct Student *s = create_student(id, name, grade);
+        if (s == NULL) {
+            free_students(head);
+            fclose(f);
+            return NULL;
+        }
+        append_student(&head, s);
+    }
+    fclose(f);
+    return head;
+}
