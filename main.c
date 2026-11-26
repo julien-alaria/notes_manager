@@ -120,12 +120,12 @@ int main(void) {
                 break;
             }
             case 5:
-            if (head == NULL) {
-                printf("Student list is empty\n");
-                break;
-            }
-            printf("Average: %.2f\n", average(head));
-                break;
+                if (head == NULL) {
+                    printf("Student list is empty\n");
+                    break;
+                }
+                printf("Average: %.2f\n", average(head));
+                    break;
 
             case 6: {
                 const struct Student *best = best_student(head);
@@ -152,7 +152,7 @@ int main(void) {
                     printf("Save failed\n");
                 }
                 break;
-            
+                
             case 9: {
                 struct Student *loaded = load_students("students.txt");
                 if (loaded == NULL) {
